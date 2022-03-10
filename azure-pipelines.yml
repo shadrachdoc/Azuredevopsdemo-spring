@@ -1,31 +1,24 @@
-#Demo Spring application
-
+#demo
 trigger:
- branches:
-    include:
-      - master
-pr:
-  branches:
-    include:
-      - master
+- master
 
 pool:
   vmImage: ubuntu-latest
 
 stages:
-  - stage: 'BuildArtifact'
-    displayName: ' Building Artifact'
+  - stage: 'Junit'
+    displayName: 'Junit stage'
     jobs:
-      - job: 'BuildArtifact'
-        displayName: 'Building Artifact'
+      - job: 'JunitTest'
+        displayName: 'Running unit test'
         steps:
-        - template: '$(agent.builddirectory)/s/cicd/stages/build_stage.yml'
-
-  - stage: 'Dockerize'
-    displayName: 'Create Docker Image'
-    condition: and(succeeded(),ne(variables['Build.Reason'],'PullRequest'))
-    jobs:
-      - job: 'CreateDockerImage'
-        displayName: 'Build and Publish Docker Image'
-        steps:
-        - template: '$(agent.builddirectory)/s/cicd/stages/dockerise_stage.yml'
+          - script: echo 'test9962061144'
+          - task: Maven@1
+            inputs:
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: true
+              sonarQubeRunAnalysis: false
