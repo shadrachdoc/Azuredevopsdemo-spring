@@ -21,4 +21,16 @@ stages:
               javaHomeOption: 'JDKVersion'
               mavenVersionOption: 'Default'
               mavenAuthenticateFeed: true
-              sonarQubeRunAnalysis: false
+              sonarQubeRunAnalysis: true
+              sonarQubeProjectName: 'sonarpro'
+              sonarQubeSpecifyDB: false
+          - task: CopyFiles@1
+            inputs:
+              SourceFolder: '$(build.artifactstagingdirectory)/src/target'
+              Contents: '*.jar'
+              TargetFolder: '$(build.artifactstagingdirectory)'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
